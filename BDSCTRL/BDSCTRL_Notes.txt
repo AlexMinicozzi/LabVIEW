@@ -1,0 +1,63 @@
+Controls to add to Panel Functions:
+TX digital gain per channel, RFIC BCU State?
+
+IF Calibration needs to measure "SemiAutoCal" and then run a function that loads IF coefficients into RFIC.  Consider individual
+looping technique to allow detailed observation of each device measurement for both IF and RF calibrations.
+
+Do global variables auto update calling VI indicators?
+
+
+Make Packet:
+
+Make Header (Hex)
+Make Body (Hex)
+Make Tail (Hex)
+
+Make Packet 
+
+little endian gets applied only to EACH FIELD
+
+
+
+Checksum performed on the byte stream level
+
+
+Matlab Vienna Structure:
+
+-Panel Function Call
+	-IssuePanelCommand(MainCommand,SubCommand,Inputs)
+		-Header = MakeHeaderTemplate(Source,Target,MainCommand,SubCommand, 'Request Packet', DataReturnRequest)
+		-Body = MakePanelCommandBody(MainCommand,SubCommand, Inputs)
+			-PanelFunction Specific Make Body call
+		-Tail = MakeTail()
+		-Packet = MakePacket(Header,Body,Tail)
+			-Create Checksum Bytes
+			
+			
+-Melvitron SemiAutoCal
+	-Set VGA for Tx and Rx
+	-Reset Channels
+	-Set Probe to default position
+	-Calibrate along each Co-Pol line
+		-Probe directions along short and long axes
+		-Set VNA for Tx or Rx measurement
+		-Set Channel Enable for device for measure
+		-If Tx Measure, set PAL off
+		-Set BCU State to 'MAG'.  What is this?
+		-Measure Amplitude with VNA w/ averages:VNA_Meas_Channel_Single.  Measure Count number and verify diff is stable.
+		-Turn on PAL correction
+		-Turn off PAL correction
+		-Calibrate Phase:
+		-Set BCU State to 'Phase'
+		-Measure phase value in count loop and check for stability: MELV_Calibrate_Phase
+		-Turn back on PAL Correction
+		-Disable Channels
+	-Repeat calibration along each Cx-Pol line	
+	
+	
+	
+	
+	
+	
+	
+			
